@@ -57,7 +57,11 @@ class GitHubUser(object):
         # when I did. but not when I used the old fashioned way of just stringing them together.
         email = self.user_json["email"]
         username = self.user_json["login"]
-        file = base64.b64encode(file.encode('utf-8'))
+        if type(file) == type(b'test'):
+            file = base64.b64encode(file)
+        else:
+            file = base64.b64encode(file.encode('utf-8'))
+        # ^ so I don't encode the already encoded, such as a file.read()
         file = file.decode('utf-8').replace("\n","\\n")
         if no_sha:
             data = '{"commiter": {"email": "' + email + '", "name": "' + username + '"}, "content": "' + file + '", "message": "' + msg + '"}'
